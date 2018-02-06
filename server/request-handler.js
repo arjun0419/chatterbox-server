@@ -22,8 +22,7 @@ this file and include it in basic-server.js so that it actually works.
 // Another way to get around this restriction is to serve you chat
 // client from this domain by setting up static file serving.
 
-var messageStorage = [];
-var roomStorage = [];
+var messageStorage = [{room: 'lobby', text: 'message 0', user: 'USER1'}, {room: 'lobby', text: 'message 1', user: 'USER1'}];
 
 var defaultCorsHeaders = {
   'access-control-allow-origin': '*',
@@ -53,6 +52,7 @@ var requestHandler = function(request, response) {
     }).on('end', () => {
       body = Buffer.concat(body).toString();
       // BEGINNING OF NEW STUFF
+      console.log(body);
       messageStorage.push(JSON.parse(body));
       statusCode = 201;
 
@@ -60,7 +60,7 @@ var requestHandler = function(request, response) {
 
       var data = {};
       data.results = [];
-      console.log('6 ', statusCode);
+      // console.log('6 ', statusCode);
       if (messageStorage.length > 0) {
         messageStorage.forEach(function(message) {
           data.results.push(message);
@@ -82,7 +82,6 @@ var requestHandler = function(request, response) {
       // BEGINNING OF NEW STUFF
       messageStorage.push(JSON.parse(body));
       statusCode = 201;
-      console.log('2 ', statusCode);
 
       response.writeHead(statusCode, headers);
 
@@ -107,6 +106,12 @@ var requestHandler = function(request, response) {
         data.results.push(message);
       });
     }
+
+    response.end(JSON.stringify(data));
+
+  } else if (method === 'OPTIONS') {
+    statusCode = 200;
+    response.writeHead(statusCode, headers);
 
     response.end(JSON.stringify(data));
 
