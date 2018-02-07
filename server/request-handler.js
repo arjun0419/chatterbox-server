@@ -52,10 +52,20 @@ var requestHandler = function(request, response) {
     }).on('end', () => {
       body = Buffer.concat(body).toString();
       // BEGINNING OF NEW STUFF
-      console.log(body);
-      messageStorage.push(JSON.parse(body));
-      statusCode = 201;
+      var parsedBody = JSON.parse(body);
 
+      if (parsedBody.text) {
+        if (parsedBody.text.length < 100) {    
+          messageStorage.unshift(parsedBody);
+          statusCode = 201;
+        } else {
+          statusCode = 400;
+        }
+
+      } else {
+        statusCode = 400;
+      }
+      
       response.writeHead(statusCode, headers);
 
       var data = {};
@@ -80,7 +90,7 @@ var requestHandler = function(request, response) {
     }).on('end', () => {
       body = Buffer.concat(body).toString();
       // BEGINNING OF NEW STUFF
-      messageStorage.push(JSON.parse(body));
+      messageStorage.unshift(JSON.parse(body));
       statusCode = 201;
 
       response.writeHead(statusCode, headers);
