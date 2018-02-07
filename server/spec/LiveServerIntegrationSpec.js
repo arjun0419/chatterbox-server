@@ -37,7 +37,7 @@ describe('server', function() {
     var requestParams = {method: 'POST',
       uri: 'http://127.0.0.1:3000/classes/messages',
       json: {
-        username: 'Jono',
+        user: 'Jono',
         text: 'Do my bidding!'}
     };
 
@@ -51,7 +51,7 @@ describe('server', function() {
     var requestParams = {method: 'POST',
       uri: 'http://127.0.0.1:3000/classes/messages',
       json: {
-        username: 'Jono',
+        user: 'Jono',
         text: 'Do my bidding!'}
     };
 
@@ -59,7 +59,7 @@ describe('server', function() {
       // Now if we request the log, that message we posted should be there:
       request('http://127.0.0.1:3000/classes/messages', function(error, response, body) {
         var messages = JSON.parse(body).results;
-        expect(messages[0].username).to.equal('Jono');
+        expect(messages[0].user).to.equal('Jono');
         expect(messages[0].text).to.equal('Do my bidding!');
         done();
       });
@@ -78,7 +78,7 @@ describe('server', function() {
     var requestParams = {method: 'POST',
       uri: 'http://127.0.0.1:3000/classes/messages',
       json: {
-        username: 'Jono',
+        user: 'Jono',
         text: ''}
     };
 
@@ -88,25 +88,25 @@ describe('server', function() {
     });
   });
 
-  // it('should not accept POST requests to /classes/messages when user is undefined and should 400', function(done) {
-  //   var requestParams = {method: 'POST',
-  //     uri: 'http://127.0.0.1:3000/classes/messages',
-  //     json: {
-  //       username: '',
-  //       text: 'Do my bidding!'}
-  //   };
+  it('should not accept POST requests to /classes/messages when user is undefined and should 400', function(done) {
+    var requestParams = {method: 'POST',
+      uri: 'http://127.0.0.1:3000/classes/messages',
+      json: {
+        user: undefined,
+        text: 'Do my bidding!'}
+    };
 
-  //   request(requestParams, function (error, response, body) {
-  //     expect(response.statusCode).to.equal(400);
-  //     done();
-  //   });
-  // });
+    request(requestParams, function (error, response, body) {
+      expect(response.statusCode).to.equal(400);
+      done();
+    });
+  });
 
   it('should not accept POST requests to /classes/messages when text.length is > 100 and should 400', function(done) {
     var requestParams = {method: 'POST',
       uri: 'http://127.0.0.1:3000/classes/messages',
       json: {
-        username: 'Jono',
+        user: 'Jono',
         text: 'askjBFFFFDKJhabdks;hsoqihDHAS;DHAKshdkshdkjba;sDBKJbd;bskdbaksbdk;bKDBSK;Jbas;dkbkjsabDK;BASkdabdjsksajbDIQWOG[Qd'}
     };
 

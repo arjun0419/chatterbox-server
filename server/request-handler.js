@@ -54,7 +54,7 @@ var requestHandler = function(request, response) {
       // BEGINNING OF NEW STUFF
       var parsedBody = JSON.parse(body);
 
-      if (parsedBody.text) {
+      if (parsedBody.text && parsedBody.user) {
         if (parsedBody.text.length < 100) {    
           messageStorage.unshift(parsedBody);
           statusCode = 201;
